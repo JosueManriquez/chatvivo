@@ -8,17 +8,31 @@
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <style>
         /* Indicador arriba a la derecha */
-        #estado {
+        #infoUsuario {
             position: absolute;
             top: 10px;
             right: 20px;
+            text-align: right;
             font-weight: bold;
+        }
+
+        #estado {
+            font-size: 14px;
+        }
+
+        #usuarioDisplay {
+            font-size: 14px;
+            margin-bottom: 3px;
         }
     </style>
 </head>
 
 <body>
-    <div id="estado">Desconectado</div>
+    <div id="infoUsuario">
+        <div id="usuarioDisplay">Usuario: -</div>
+        <div id="estado">Desconectado</div>
+    </div>
+
     <h2>Chat Global Josue</h2>
 
     <!-- Nombre de usuario -->
@@ -41,22 +55,23 @@
 
         let nombreUsuario = "";
         const estadoDiv = document.getElementById("estado");
+        const usuarioDisplay = document.getElementById("usuarioDisplay");
 
         // 🔹 Detectar conexión
         socket.on("connect", () => {
-            estadoDiv.textContent = nombreUsuario + "Conectado";
+            estadoDiv.textContent = "Conectado";
             estadoDiv.style.color = "green";
         });
 
         // 🔹 Detectar desconexión
         socket.on("disconnect", () => {
-            estadoDiv.textContent = nombreUsuario + "Desconectado";
+            estadoDiv.textContent = "Desconectado";
             estadoDiv.style.color = "red";
         });
 
         // 🔹 Si hay un error en la conexión
         socket.on("connect_error", () => {
-            estadoDiv.textContent = nombreUsuario + "Desconectado";
+            estadoDiv.textContent = "Desconectado";
             estadoDiv.style.color = "red";
         });
 
@@ -64,6 +79,7 @@
             const inputNombre = document.getElementById("nombre").value.trim();
             if (inputNombre !== "") {
                 nombreUsuario = inputNombre;
+                usuarioDisplay.textContent = "Usuario: " + nombreUsuario;
                 document.getElementById("chat").style.display = "block";
 
                 // Avisar al servidor el nuevo usuario
