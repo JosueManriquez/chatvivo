@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Global</title>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
 </head>
 <body>
     <h2>Chat Global</h2>
@@ -24,7 +24,9 @@
     </div>
 
     <script>
-        const socket = io();
+        // Conectar al backend en Railway
+        const socket = io("https://chatvivo-production.up.railway.app");
+
         let nombreUsuario = "";
 
         function guardarNombre() {
