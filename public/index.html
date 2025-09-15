@@ -44,19 +44,19 @@
 
         // 🔹 Detectar conexión
         socket.on("connect", () => {
-            estadoDiv.textContent = "Conectado";
+            estadoDiv.textContent = nombreUsuario + "Conectado";
             estadoDiv.style.color = "green";
         });
 
         // 🔹 Detectar desconexión
         socket.on("disconnect", () => {
-            estadoDiv.textContent = "Desconectado";
+            estadoDiv.textContent = nombreUsuario + "Desconectado";
             estadoDiv.style.color = "red";
         });
 
         // 🔹 Si hay un error en la conexión
         socket.on("connect_error", () => {
-            estadoDiv.textContent = "Desconectado";
+            estadoDiv.textContent = nombreUsuario + "Desconectado";
             estadoDiv.style.color = "red";
         });
 
