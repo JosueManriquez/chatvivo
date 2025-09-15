@@ -18,7 +18,6 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });
 
-// Guardar usuarios conectados
 let usuarios = {};
 
 io.on("connection", (socket) => {
