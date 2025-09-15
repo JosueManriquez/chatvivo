@@ -18,45 +18,63 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 });
 
+// Guardar usuarios conectados
 let usuarios = {};
 
 io.on("connection", (socket) => {
     console.log("Un cliente se conectó:", socket.id);
 
+    // Nuevo usuario
     socket.on("nuevo-usuario", (nombre) => {
         socket.data.nombre = nombre;
         usuarios[socket.id] = nombre;
 
         console.log(`${nombre} se ha conectado`);
 
-        // Avisar a todos
         io.emit("mensaje-global", {
             nombre: "Servidor",
             mensaje: `${nombre} se ha unido al chat`
         });
 
-        // Enviar lista actualizada
-        io.emit("usuarios-online", Object.values(usuarios));
+        // Enviar lista de usuarios actualizada
+        io.emit("usuarios-online", usuarios);
     });
 
+    // Mensaje global
     socket.on("mensaje-global", (data) => {
         console.log(`${data.nombre}: ${data.mensaje}`);
         io.emit("mensaje-global", data);
     });
 
+    // Mensaje privado
+    socket.on("mensaje-privado", ({ destinatarioId, mensaje }) => {
+        const remitente = socket.data.nombre;
+        if (usuarios[destinatarioId]) {
+            // Enviar solo al destinatario
+            io.to(destinatarioId).emit("mensaje-privado", {
+                remitente,
+                mensaje
+            });
+            // Copia al remitente
+            socket.emit("mensaje-privado", {
+                remitente: `(Tú → ${usuarios[destinatarioId]})`,
+                mensaje
+            });
+        }
+    });
+
+    // Desconexión
     socket.on("disconnect", () => {
         if (socket.data.nombre) {
             console.log(`${socket.data.nombre} se ha desconectado`);
-
-            delete usuarios[socket.id]; // quitarlo de la lista
+            delete usuarios[socket.id];
 
             io.emit("mensaje-global", {
                 nombre: "Servidor",
                 mensaje: `${socket.data.nombre} ha salido del chat`
             });
 
-            // Actualizar lista
-            io.emit("usuarios-online", Object.values(usuarios));
+            io.emit("usuarios-online", usuarios);
         }
     });
 });
