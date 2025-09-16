@@ -32,7 +32,7 @@
     <button onclick="darLike()">Dar Like 👍</button>
 
     <script>
-        const socket = io();
+        const socket = io("https://chatvivo.onrender.com");
         const contadorDiv = document.getElementById("contador");
 
         // Recibir contador desde el servidor
