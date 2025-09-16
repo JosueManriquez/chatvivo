@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,10 +12,12 @@
             text-align: center;
             margin-top: 50px;
         }
+
         #contador {
             font-size: 2rem;
             margin: 20px 0;
         }
+
         button {
             font-size: 1.5rem;
             padding: 10px 20px;
@@ -22,14 +25,14 @@
         }
     </style>
 </head>
+
 <body>
     <h1>👍 Contador de Likes en Tiempo Real</h1>
     <div id="contador">0</div>
     <button onclick="darLike()">Dar Like 👍</button>
 
     <script>
-        const socket = io("https://chatvivo.onrender.com");
-
+        const socket = io();
         const contadorDiv = document.getElementById("contador");
 
         // Recibir contador desde el servidor
@@ -43,4 +46,5 @@
         }
     </script>
 </body>
+
 </html>
